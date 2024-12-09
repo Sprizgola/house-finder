@@ -9,7 +9,7 @@ from haystack.components.converters.utils import normalize_metadata
 from haystack.components.fetchers import LinkContentFetcher
 from bs4 import BeautifulSoup, Tag
 
-from bonsai_lib.macros import REAL_ESTATE_STATUS, FLOOR_MAP, PROVINCE_MAP
+from internal_lib.macros import REAL_ESTATE_STATUS, FLOOR_MAP, PROVINCE_MAP
 
 
 @component
@@ -223,30 +223,30 @@ class SQLQueryParser:
             if isinstance(query, ChatMessage):
                 query = query.content
 
-            query = query.replace("\n", " ")
+            results = [query.replace("\n", " ")]
 
-            try:
-                parsed_query = regex.search(query).groups()[0].lower()
-            except AttributeError:
-                return {"replies": [""]}
+            # try:
+            #     parsed_query = regex.search(query).groups()[0].lower()
+            # except AttributeError:
+            #     return {"replies": [""]}
             
             # Add LOWERCASE cast to VARCHAR columns
 
-            tmp = []
+            # tmp = []
 
-            conditions = parsed_query.split("where")[1]
+            # conditions = parsed_query.split("where")[1]
 
-            for condition in conditions.split("and"):
+            # for condition in conditions.split("and"):
 
-                col, val = condition.split("=")
+            #     col, val = condition.split("=")
 
-                if "'" in val or '"' in val:
-                    col = "lower({})".format(col.strip(" "))
+            #     if "'" in val or '"' in val:
+            #         col = "lower({})".format(col.strip(" "))
 
-                tmp.append("{} = {}".format(col.strip(), val.strip()))
+            #     tmp.append("{} = {}".format(col.strip(), val.strip()))
 
-            parsed_query = parsed_query.replace(conditions, " {}".format(" AND ".join(tmp))).strip()
+            # parsed_query = parsed_query.replace(conditions, " {}".format(" AND ".join(tmp))).strip()
 
-            results.append(parsed_query)
+            # results.append(parsed_query)
 
         return {"replies": results}

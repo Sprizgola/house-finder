@@ -9,9 +9,9 @@ from ast import literal_eval
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
-from bonsai_lib.pipelines import SubitoScraperPipeline, SubitoSearchPipeline
-from bonsai_lib.components import SQLWriter
-from bonsai_lib.schema import SearchQuery, GeneratorConfig
+from internal_lib.pipelines import SubitoScraperPipeline, SubitoSearchPipeline
+from internal_lib.components import SQLWriter
+from internal_lib.schema import SearchQuery, GeneratorConfig
 
 
 load_dotenv("config.env")

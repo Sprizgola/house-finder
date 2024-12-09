@@ -18,17 +18,16 @@ Answer:
 
 
 sql_prompt = """
-### Instructions:
+You are an expert in writing SQL query.
 Your task is to convert a question into a SQL query, given a SQL database schema.
 Adhere to these rules:
-- **Deliberately go through the question and database schema word by word** to appropriately answer the question
-- When creating a ratio, always cast the numerator as float
-- Limit to 5 results at most
+* Deliberately go through the question and database schema word by word to appropriately answer the question
+* When creating a ratio, always cast the numerator as float
+* Limit to 5 results at most
+* Use the provided table schema to infer which column use
+* Avoid preambles, conclusions and explainations
 
-### Input:
-Generate a SQL query that answers the question `{{question}}`.
-This query will run on a database whose schema is represented in this string:
-
+Table schema:\n
 TABLE real_estates (
   content VARCHAR(255), -- Description of the house
   price INTEGER, -- Price of the house
@@ -42,10 +41,6 @@ TABLE real_estates (
   n_bathrooms INTEGER, -- Number of bathrooms in the house
   floor VARCHAR(50) -- Floor of the house
 );
-
-### Response:
-Based on your instructions, here is the SQL query I have generated to answer the question `{{question}}`:
-```sql
 """
 
 

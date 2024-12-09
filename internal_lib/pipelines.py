@@ -24,9 +24,9 @@ from haystack.components.joiners import DocumentJoiner
 from haystack.components.preprocessors import DocumentSplitter, DocumentCleaner
 from haystack.components.fetchers import LinkContentFetcher
 
-from bonsai_lib.components import SubitoItParser, SQLQueryParser, SQLValidator, SQLQuery
-from bonsai_lib.prompts import sql_prompt
-from bonsai_lib.schema import GeneratorConfig
+from internal_lib.components import SubitoItParser, SQLQueryParser, SQLValidator, SQLQuery
+from internal_lib.prompts import sql_prompt
+from internal_lib.schema import GeneratorConfig
 
 from haystack_integrations.components.generators.mistral import MistralChatGenerator
 
@@ -148,7 +148,10 @@ class SubitoSearchPipeline(Pipeline):
                     timeout=generator_config.timeout
                 )
                 prompt_builder = ChatPromptBuilder(
-                    template=[ChatMessage.from_system(sql_prompt)]
+                    template=[
+                        ChatMessage.from_system(sql_prompt),
+                        ChatMessage.from_user("Here is the user question:\n{{question}}\n\nBased on your question, here is the SQL query I have generated without preambles, conclusions or explainations:\n```sql")
+                        ]
                 )
             case "mistral":
                 sqlcoder = MistralChatGenerator(
