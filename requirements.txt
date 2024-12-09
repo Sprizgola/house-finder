@@ -1,0 +1,13 @@
+haystack-ai==2.8
+ollama-haystack==2.1.0
+mistral-haystack==0.0.2
+
+chroma-haystack==0.21.1
+sentence-transformers==3.3.1
+protobuf==3.20.1
+
+beautifulsoup4==4.12.3 
+fastapi==0.115.6
+uvicorn==0.32.1
+
+pypdf==5.1.0
