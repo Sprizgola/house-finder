@@ -150,8 +150,10 @@ class SubitoSearchPipeline(Pipeline):
                 prompt_builder = ChatPromptBuilder(
                     template=[
                         ChatMessage.from_system(sql_prompt),
-                        ChatMessage.from_user("Here is the user question:\n{{question}}\n\nBased on your question, here is the SQL query I have generated without preambles, conclusions or explainations:\n```sql")
-                        ]
+                        ChatMessage.from_user("""### Response:\nBased on your instructions, here is the SQL query I have generated to answer the question `{{question}}`:\n```sql""")
+                        ],
+                    variables=["question"]
+                        
                 )
             case "mistral":
                 sqlcoder = MistralChatGenerator(

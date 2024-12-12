@@ -2,6 +2,7 @@ import os
 import logging
 
 import uvicorn
+import gradio as gr
 
 from dotenv import load_dotenv
 from ast import literal_eval
@@ -74,17 +75,22 @@ def search(query: SearchQuery):
     response = rag_pipeline.run(
         {"prompt_builder": 
             {
-                "question": query.query
+                "question": query
             },
         }
     )
 
-    logging.info("Results: ")
-    logging.info("\n ".join(str(x) for x in response["sql_query"]["results"]))
-
     logging.info(f"SQL Query: *** {response['sql_query']['queries'][0]} ***")
 
-    return JSONResponse(content=response["sql_query"]["results"], status_code=200)
+    results = response["sql_query"]["results"]
+
+    msg = "Ecco i risultati trovati:\n\n"
+
+    msg += "\n-----------------------------------------\n".join(["""Descrizione: {0}\nCittà: {4}\nMQ: {7}\nN°locali: {8}\nPrezzo: {1}""".format(*x) for x in results[:3]])
+
+    return msg
+
+
 
 if __name__ == "__main__":
 
@@ -96,4 +102,7 @@ if __name__ == "__main__":
         timeout=int(os.getenv("TIMEOUT"))
     )
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    io = gr.Interface(search, "textbox", "textbox")
+    app = gr.mount_gradio_app(app, io, path="/")
+    
+    uvicorn.run(app=app, host="0.0.0.0", port=8080)

@@ -200,6 +200,7 @@ class SQLQuery:
 
         for query in queries:
             
+            print(f"QUERY GENERATA: \t {query}")
             result = cursor.execute(query)
             
             results.extend(result.fetchall())

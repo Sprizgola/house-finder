@@ -18,48 +18,29 @@ Answer:
 
 
 sql_prompt = """
-You are an expert in writing SQL query.
-Your task is to convert a question into a SQL query, given a SQL database schema.
+### Instructions:
+Your task is to convert a question into a SQL query, given a Postgres database schema.
 Adhere to these rules:
-* Deliberately go through the question and database schema word by word to appropriately answer the question
-* When creating a ratio, always cast the numerator as float
-* Limit to 5 results at most
-* Use the provided table schema to infer which column use
-* Avoid preambles, conclusions and explainations
+- **Deliberately go through the question and database schema word by word** to appropriately answer the question
+- When creating a ratio, always cast the numerator as float
+- Do not add explaination, preambles or conclusions.
+- Alway use SELECT * in the statement
 
-Table schema:\n
-TABLE real_estates (
+### Input:
+Generate a SQL query that answers the user question.
+This query will run on a database whose schema is represented in this string:
+
+CREATE TABLE real_estates (
   content VARCHAR(255), -- Description of the house
   price INTEGER, -- Price of the house
-  link VARCHAR(255), -- Link of the ad
-  sold BOOL,  -- If the house is sold or not
-  city VARCHAR(255), -- City of the house
-  province VARCHAR(255), -- Province of the house
+  link VARCHAR(255), -- Link of the online ad
+  sold BOOL,  -- Flag that said if the house is sold or not
+  city VARCHAR(255), -- City where the house is located
+  province VARCHAR(255), -- Province where the house is located
   is_real_estate_agency BOOLm -- If it is owner by an agency
   mq INTEGER, -- Square meters of the house
   n_rooms INTEGER, -- Number of rooms in the house
   n_bathrooms INTEGER, -- Number of bathrooms in the house
   floor VARCHAR(50) -- Floor of the house
 );
-"""
-
-
-template_prompt = """
-{% if query_to_validate %}
-    Here was the text you were provided:
-    {{ question }}
-    Here is the query you previously generate: 
-    {{ query_to_validate[0] }}
-    Are the query correct? 
-    Things to check for:
-    - Table name should be {{ table_name }}
-    - Column names should be {{ column_names }}
-    - The reply should be in this format: [SQL] QUERY [\SQL]
-
-    If the query is correct, say 'DONE' and return the SQL query
-    If not, simply return the best SQL query you can come up with.
-    
-    Based on your instructions, here is the SQL query:
-
-{% else %} """ + sql_prompt + """ {% endif %}
 """
